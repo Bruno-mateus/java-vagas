@@ -2,7 +2,6 @@ package br.com.brunomateus.gestao_vagas.modules.candidate.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.brunomateus.gestao_vagas.exceptions.UserFoundException;
 import br.com.brunomateus.gestao_vagas.modules.candidate.CandidateEntity;
 import br.com.brunomateus.gestao_vagas.modules.candidate.useCases.CreateCandidateUseCase;
 import jakarta.validation.Valid;

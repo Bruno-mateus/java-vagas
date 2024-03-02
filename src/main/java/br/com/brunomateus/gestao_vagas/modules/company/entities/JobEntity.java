@@ -20,13 +20,17 @@ public class JobEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
     private String description;
     private String level;
     private String benefits;
 
     @ManyToOne()
-    @JoinColumn(name="company_id")
+    @JoinColumn(name="company_id",insertable = false,updatable = false)
     private CompanyEntity companyEntity;
+
+    @Column(name="company_id",nullable = false)
+    private UUID companyId;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
