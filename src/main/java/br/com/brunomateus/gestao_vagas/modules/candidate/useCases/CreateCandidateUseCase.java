@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.brunomateus.gestao_vagas.exceptions.UserFoundException;
 import br.com.brunomateus.gestao_vagas.modules.candidate.CandidateEntity;
-import br.com.brunomateus.gestao_vagas.modules.candidate.controllers.CandidateRepository;
+import br.com.brunomateus.gestao_vagas.modules.candidate.repository.CandidateRepository;
 
 
 @Service
@@ -17,7 +17,7 @@ public class CreateCandidateUseCase {
 
 @Autowired
   private CandidateRepository candidateRepository;
-
+  
 
   public CandidateEntity execute(CandidateEntity candidateEntity){
 

@@ -1,4 +1,4 @@
-package br.com.brunomateus.gestao_vagas.modules.candidate.controllers;
+package br.com.brunomateus.gestao_vagas.modules.candidate.repository;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -10,4 +10,5 @@ import br.com.brunomateus.gestao_vagas.modules.candidate.CandidateEntity;
 
 public interface CandidateRepository extends JpaRepository<CandidateEntity,UUID>{
     Optional<CandidateEntity> findByUsernameOrEmail(String username, String email);
+    Optional<CandidateEntity> findByUsername(String username);
 }
