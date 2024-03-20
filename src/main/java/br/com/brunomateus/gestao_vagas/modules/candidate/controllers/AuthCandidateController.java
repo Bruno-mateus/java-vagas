@@ -1,4 +1,6 @@
 package br.com.brunomateus.gestao_vagas.modules.candidate.controllers;
+import br.com.brunomateus.gestao_vagas.modules.candidate.dto.AuthCandidateDTO;
+import br.com.brunomateus.gestao_vagas.modules.candidate.useCases.AuthCandidateUseCase;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,8 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.brunomateus.gestao_vagas.modules.candidate.dto.AuthCandidateDTO;
-import br.com.brunomateus.gestao_vagas.modules.candidate.useCases.AuthCandidateUseCase;
+
 
 
 @RestController
