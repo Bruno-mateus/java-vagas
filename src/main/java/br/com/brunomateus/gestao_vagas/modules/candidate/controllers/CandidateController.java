@@ -42,18 +42,15 @@ public class CandidateController {
 
   @GetMapping("/profile")
   public ResponseEntity<Object> get(HttpServletRequest request){
-    var candidate_id = request.getAttribute("company_id"); //ainda vamos setar
+    var candidate_id = request.getAttribute("company_id"); 
     
     try{
-        //tenta buscar o candidato atraves do id
         var candidate = this.profileCandidateUseCase.execute(UUID.fromString(candidate_id.toString()));
-        //se sucesso o retorna
       return ResponseEntity.ok().body(candidate);
     }catch(Exception e){
 
       e.printStackTrace();
-      //se não encontrar retorna um erro
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+      return ResponseEntity.badRequest().body(e.getMessage());
     }
   }
 
