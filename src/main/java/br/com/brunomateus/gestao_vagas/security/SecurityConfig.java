@@ -19,10 +19,13 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http.csrf(csrf->csrf.disable())
+        
         .authorizeHttpRequests(auth->{
             auth.requestMatchers("/candidate/create").permitAll()
             .requestMatchers("/company/create").permitAll()
-            .requestMatchers("/auth/company").permitAll();
+            .requestMatchers("/auth/company").permitAll()
+            .requestMatchers("/auth/candidate").permitAll();
+
             auth.anyRequest().authenticated();
         }
             ).addFilterBefore(securityFilter,BasicAuthenticationFilter.class);

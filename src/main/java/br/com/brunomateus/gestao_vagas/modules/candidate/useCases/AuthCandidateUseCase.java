@@ -29,7 +29,7 @@ public class AuthCandidateUseCase {
 
      @Value("${security.token.secret.candidate}")
     private String secretKey;
-
+    
     public AuthCandidateResponseDTO execute(AuthCandidateDTO authCandidateDTO) throws AuthenticationException{
         //verify user exists
       var candidate =  this.candidateRepository.findByUsername(authCandidateDTO.username())
@@ -43,16 +43,23 @@ public class AuthCandidateUseCase {
         if(!verifyPassword){
             throw new AuthenticationException();
         }
+        
 
         Algorithm algorithm = Algorithm.HMAC256(this.secretKey);
-       var token = JWT.create()
+        
+        var expiresIn = Instant.now().plus(Duration.ofMinutes(10));
+
+        var token = JWT.create()
         .withIssuer("javagas") 
         .withSubject(candidate.getId().toString()) 
         .withClaim("rules", Arrays.asList("candidate")) 
-        .withExpiresAt(Instant.now().plus(Duration.ofMinutes(10))) 
+        .withExpiresAt(expiresIn) 
         .sign(algorithm);
 
-        var authCandidateResponse = AuthCandidateResponseDTO.builder().access_token(token).build();
+        var authCandidateResponse = AuthCandidateResponseDTO.builder()
+            .access_token(token)
+            .expiresIn(expiresIn.toEpochMilli())
+            .build();
         
         return authCandidateResponse;
     }
