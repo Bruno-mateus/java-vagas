@@ -3,6 +3,7 @@ package br.com.brunomateus.gestao_vagas.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,10 +12,13 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 //indicamos que vamos criar uma classe de configuracao para que o spring gerencie
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfig {
     @Autowired
     SecurityFilter securityFilter;
 
+    @Autowired
+    SecurityFilterCandidate securityFilterCandidate;
     //indicamos que vamos definir um OBJ ja gerenciado pelo spring
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
@@ -23,13 +27,13 @@ public class SecurityConfig {
         .authorizeHttpRequests(auth->{
             auth.requestMatchers("/candidate/create").permitAll()
             .requestMatchers("/company/create").permitAll()
-            .requestMatchers("/auth/company").permitAll()
-            .requestMatchers("/auth/candidate").permitAll();
-
+            .requestMatchers("/company/auth").permitAll()
+            .requestMatchers("/candidate/auth").permitAll()
+            .requestMatchers("/candidate/profile").permitAll();
             auth.anyRequest().authenticated();
         }
-            ).addFilterBefore(securityFilter,BasicAuthenticationFilter.class);
-
+        ).addFilterBefore(securityFilterCandidate, BasicAuthenticationFilter.class)
+        .addFilterBefore(securityFilter,BasicAuthenticationFilter.class);
         return http.build();
     }
 

@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/candidate")
 public class AuthCandidateController {
 
     @Autowired
     private AuthCandidateUseCase authCandidateUseCase;
 
-    @PostMapping("/candidate") 
+    @PostMapping("/auth") 
     ResponseEntity<Object> auth(@RequestBody AuthCandidateDTO authCandidateDTO){
         try{
             

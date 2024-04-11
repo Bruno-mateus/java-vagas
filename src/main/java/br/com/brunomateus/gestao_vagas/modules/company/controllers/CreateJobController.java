@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,10 +26,11 @@ public class CreateJobController {
     private CreateJobUseCase createJobUseCase;
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('COMPANY')")
     public ResponseEntity<Object> create(@Valid @RequestBody CreateJobDTO createJobDTO, HttpServletRequest req){
         try{
             var companyId = req.getAttribute("company_id");
-
+         
             var jobEntity = JobEntity.builder()
             .benefits(createJobDTO.getBenefits())
             .description(createJobDTO.getDescription())

@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/company")
 public class AuthCompanyController {
 
     @Autowired
     private AuthCompanyUseCase authCompanyUseCase;
 
-    @PostMapping("/company")
+    @PostMapping("/auth")
     public ResponseEntity<Object> create(@Valid @RequestBody AuthCompanyDTO authCompanyDTO){
         try{
             var result = this.authCompanyUseCase.execute(authCompanyDTO);

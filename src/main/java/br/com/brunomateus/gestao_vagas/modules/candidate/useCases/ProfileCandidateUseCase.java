@@ -15,9 +15,9 @@ public class ProfileCandidateUseCase {
     @Autowired
     private CandidateRepository candidateRepository;
 
- public ProfileCandidateDTO execute(UUID company_id){
+ public ProfileCandidateDTO execute(UUID idCandidate){
     
-    var candidate = this.candidateRepository.findById(company_id)
+    var candidate = this.candidateRepository.findById(idCandidate)
                     .orElseThrow(()->{
                         throw new UsernameNotFoundException("User not found");
                     });
