@@ -3,6 +3,7 @@ package br.com.brunomateus.gestao_vagas.modules.candidate.controllers;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.brunomateus.gestao_vagas.modules.candidate.CandidateEntity;
+import br.com.brunomateus.gestao_vagas.modules.candidate.dto.ProfileCandidateDTO;
 import br.com.brunomateus.gestao_vagas.modules.candidate.useCases.CreateCandidateUseCase;
 import br.com.brunomateus.gestao_vagas.modules.candidate.useCases.FindJobByDescriptionUseCase;
 import br.com.brunomateus.gestao_vagas.modules.candidate.useCases.ProfileCandidateUseCase;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +35,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/candidate")
+@Tag(name = "Candidato", description = "Informações do candidato")
 public class CandidateController {
  
   @Autowired
@@ -46,6 +47,13 @@ public class CandidateController {
   @Autowired
   private FindJobByDescriptionUseCase findJobByDescriptionUseCase;
   @PostMapping("/create")
+  @Operation(summary = "Cadastro de candidato", description = "Essa função é responsável por cadastrar um candidato")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", content = {
+          @Content(schema = @Schema(implementation = CandidateEntity.class))
+      }),
+      @ApiResponse(responseCode = "400", description = "Usuário já existe")
+  })
   public ResponseEntity<Object> create(@Valid @RequestBody CandidateEntity candidateEntity) {
       try{
         var result = this.createCandidateUseCase.execute(candidateEntity);
@@ -55,7 +63,11 @@ public class CandidateController {
       }
 
   }
-
+  @Operation(summary = "Procura um usuário por ID",description ="Essa função encontra um usuário através do id do usuario")
+  @ApiResponses(
+    {@ApiResponse(responseCode = "200",content = @Content(schema = @Schema(implementation = ProfileCandidateDTO.class))),
+    @ApiResponse(responseCode = "400",description = "User not found")}
+  )
   @GetMapping("/profile")
   @PreAuthorize("hasRole('CANDIDATE')")
   public ResponseEntity<Object> get(HttpServletRequest request){
@@ -74,7 +86,6 @@ public class CandidateController {
      
   @GetMapping("/find-job")
   @PreAuthorize("hasRole('CANDIDATE')")
-  @Tag(name = "Candidato", description = "Listagem de vagas")
   @Operation(summary = "Listagem de vagas disponível para o candidato", description = "Essa função é responsável por listar todas as vagas disponíveis, baseada na descrição")
   @ApiResponses({
       @ApiResponse(responseCode = "200", content = {
