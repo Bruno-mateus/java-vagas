@@ -4,11 +4,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.brunomateus.gestao_vagas.modules.candidate.CandidateEntity;
 import br.com.brunomateus.gestao_vagas.modules.candidate.useCases.CreateCandidateUseCase;
+import br.com.brunomateus.gestao_vagas.modules.candidate.useCases.FindJobByDescriptionUseCase;
 import br.com.brunomateus.gestao_vagas.modules.candidate.useCases.ProfileCandidateUseCase;
+import br.com.brunomateus.gestao_vagas.modules.company.entities.JobEntity;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.UUID;
 
@@ -20,6 +23,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+
 @RestController
 @RequestMapping("/candidate")
 public class CandidateController {
@@ -29,7 +42,9 @@ public class CandidateController {
 
   @Autowired
   ProfileCandidateUseCase profileCandidateUseCase;
-
+  
+  @Autowired
+  private FindJobByDescriptionUseCase findJobByDescriptionUseCase;
   @PostMapping("/create")
   public ResponseEntity<Object> create(@Valid @RequestBody CandidateEntity candidateEntity) {
       try{
@@ -54,6 +69,27 @@ public class CandidateController {
       e.printStackTrace();
       return ResponseEntity.badRequest().body(e.getMessage());
     }
+  }
+
+     
+  @GetMapping("/find-job")
+  @PreAuthorize("hasRole('CANDIDATE')")
+  @Tag(name = "Candidato", description = "Listagem de vagas")
+  @Operation(summary = "Listagem de vagas disponível para o candidato", description = "Essa função é responsável por listar todas as vagas disponíveis, baseada na descrição")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", content = {
+          @Content(array = @ArraySchema(schema = @Schema(implementation = JobEntity.class)))
+      })
+  })
+  @SecurityRequirement(name="jwt-auth")
+  public ResponseEntity<Object> get(@Valid @RequestParam String jobDescription){
+      try{
+         var result =  this.findJobByDescriptionUseCase.execute(jobDescription);
+         return ResponseEntity.ok().body(result);
+      }catch(Exception error){
+          System.out.println(error.getMessage());
+          return ResponseEntity.badRequest().body(error.getMessage());
+      }
   }
 
 }

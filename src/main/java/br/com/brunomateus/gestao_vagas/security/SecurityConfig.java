@@ -20,6 +20,13 @@ public class SecurityConfig {
     @Autowired
     SecurityFilterCandidate securityFilterCandidate;
     //indicamos que vamos definir um OBJ ja gerenciado pelo spring
+    
+    private static final String[] SWAGGER_LIST = {
+        "swagger-ui/**",
+        "/v3/api-docs/**",
+        "/swagger-resource/**"
+};
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http.csrf(csrf->csrf.disable())
@@ -29,7 +36,8 @@ public class SecurityConfig {
             .requestMatchers("/company/create").permitAll()
             .requestMatchers("/company/auth").permitAll()
             .requestMatchers("/candidate/auth").permitAll()
-            .requestMatchers("/candidate/profile").permitAll();
+            .requestMatchers("/candidate/profile").permitAll()
+            .requestMatchers(SWAGGER_LIST).permitAll();
             auth.anyRequest().authenticated();
         }
         ).addFilterBefore(securityFilterCandidate, BasicAuthenticationFilter.class)
