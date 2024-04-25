@@ -2,8 +2,8 @@ package br.com.brunomateus.gestao_vagas.modules.candidate.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.brunomateus.gestao_vagas.modules.candidate.CandidateEntity;
 import br.com.brunomateus.gestao_vagas.modules.candidate.dto.ProfileCandidateDTO;
+import br.com.brunomateus.gestao_vagas.modules.candidate.entities.CandidateEntity;
 import br.com.brunomateus.gestao_vagas.modules.candidate.useCases.CreateCandidateUseCase;
 import br.com.brunomateus.gestao_vagas.modules.candidate.useCases.FindJobByDescriptionUseCase;
 import br.com.brunomateus.gestao_vagas.modules.candidate.useCases.ProfileCandidateUseCase;
