@@ -3,7 +3,9 @@ package br.com.brunomateus.gestao_vagas.modules.candidate.controllers;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.brunomateus.gestao_vagas.modules.candidate.dto.ProfileCandidateDTO;
+import br.com.brunomateus.gestao_vagas.modules.candidate.entities.ApplyJobEntity;
 import br.com.brunomateus.gestao_vagas.modules.candidate.entities.CandidateEntity;
+import br.com.brunomateus.gestao_vagas.modules.candidate.useCases.ApplyJobCandidateUseCase;
 import br.com.brunomateus.gestao_vagas.modules.candidate.useCases.CreateCandidateUseCase;
 import br.com.brunomateus.gestao_vagas.modules.candidate.useCases.FindJobByDescriptionUseCase;
 import br.com.brunomateus.gestao_vagas.modules.candidate.useCases.ProfileCandidateUseCase;
@@ -43,9 +45,13 @@ public class CandidateController {
 
   @Autowired
   ProfileCandidateUseCase profileCandidateUseCase;
-  
+
   @Autowired
   private FindJobByDescriptionUseCase findJobByDescriptionUseCase;
+
+  @Autowired
+  private ApplyJobCandidateUseCase applyJobCandidateUseCase;
+
   @PostMapping("/create")
   @Operation(summary = "Cadastro de candidato", description = "Essa função é responsável por cadastrar um candidato")
   @ApiResponses({
@@ -102,5 +108,25 @@ public class CandidateController {
           return ResponseEntity.badRequest().body(error.getMessage());
       }
   }
+
+@PostMapping("/job/apply")
+@PreAuthorize("hasRole('CANDIDATE')")
+@Operation(summary="Aplica uma vaga a um candidato",description = "Essa função é responsável por aplicar uma vaga a um funcionario")
+@ApiResponse(responseCode = "200",content = {
+  @Content(schema=@Schema(implementation = ApplyJobEntity.class))
+})
+@SecurityRequirement(name="jwt-auth")
+public ResponseEntity<Object> applyToJob(HttpServletRequest request, @RequestBody UUID jobId){
+  var candidateId = request.getAttribute("candidate_id");
+
+  try{
+    var result = this.applyJobCandidateUseCase.execute(UUID.fromString(candidateId.toString()), jobId);
+
+    return ResponseEntity.ok().body(result);
+  }catch(Exception e){
+    return ResponseEntity.badRequest().body(e.getMessage());
+  }
+}
+
 
 }

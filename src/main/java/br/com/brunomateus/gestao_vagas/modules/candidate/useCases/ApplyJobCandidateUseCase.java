@@ -3,6 +3,7 @@ package br.com.brunomateus.gestao_vagas.modules.candidate.useCases;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import br.com.brunomateus.gestao_vagas.exceptions.JobNotFoundExeception;
 import br.com.brunomateus.gestao_vagas.exceptions.UserNotFoundExeception;
@@ -11,6 +12,7 @@ import br.com.brunomateus.gestao_vagas.modules.candidate.repository.ApplyJobRepo
 import br.com.brunomateus.gestao_vagas.modules.candidate.repository.CandidateRepository;
 import br.com.brunomateus.gestao_vagas.modules.company.repositories.JobRepository;
 
+@Service
 public class ApplyJobCandidateUseCase {
     @Autowired
     private CandidateRepository candidateRepository;
