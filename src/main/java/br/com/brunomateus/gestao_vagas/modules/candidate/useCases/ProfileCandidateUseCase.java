@@ -3,9 +3,9 @@ package br.com.brunomateus.gestao_vagas.modules.candidate.useCases;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import br.com.brunomateus.gestao_vagas.exceptions.UserNotFoundExeception;
 import br.com.brunomateus.gestao_vagas.modules.candidate.dto.ProfileCandidateDTO;
 import br.com.brunomateus.gestao_vagas.modules.candidate.repository.CandidateRepository;
 
@@ -19,7 +19,7 @@ public class ProfileCandidateUseCase {
     
     var candidate = this.candidateRepository.findById(idCandidate)
                     .orElseThrow(()->{
-                        throw new UsernameNotFoundException("User not found");
+                        throw new UserNotFoundExeception();
                     });
 
     var candidateDTO = ProfileCandidateDTO.builder()

@@ -8,13 +8,13 @@ import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
+import br.com.brunomateus.gestao_vagas.exceptions.CompanyNotFound;
 import br.com.brunomateus.gestao_vagas.modules.company.dto.AuthCompanyDTO;
 import br.com.brunomateus.gestao_vagas.modules.company.dto.AuthResponseCompanyDTO;
 import br.com.brunomateus.gestao_vagas.modules.company.repositories.CompanyRepository;
@@ -36,7 +36,7 @@ public class AuthCompanyUseCase {
             
         var company = this.companyRepository.findCompanyByUsername(authCompanyDTO.getUsername()).orElseThrow(
             ()->{
-                throw new UsernameNotFoundException("Company is not found");
+                throw new CompanyNotFound();
             });
         
        
