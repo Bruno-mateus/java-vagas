@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.brunomateus.gestao_vagas.exceptions.CompanyNotFound;
 import br.com.brunomateus.gestao_vagas.modules.company.dto.CreateJobDTO;
 import br.com.brunomateus.gestao_vagas.modules.company.entities.JobEntity;
+import br.com.brunomateus.gestao_vagas.modules.company.repositories.CompanyRepository;
 import br.com.brunomateus.gestao_vagas.modules.company.useCases.CreateJobUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -30,6 +32,8 @@ public class CreateJobController {
     
     @Autowired
     private CreateJobUseCase createJobUseCase;
+    @Autowired
+    private CompanyRepository companyRepository;
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('COMPANY')")
@@ -41,7 +45,10 @@ public class CreateJobController {
     public ResponseEntity<Object> create(@Valid @RequestBody CreateJobDTO createJobDTO, HttpServletRequest req){
         try{
             var companyId = req.getAttribute("company_id");
-         
+            
+            this.companyRepository.findById(UUID.fromString(companyId.toString()))
+            .orElseThrow( ()-> new CompanyNotFound());
+
             var jobEntity = JobEntity.builder()
             .benefits(createJobDTO.getBenefits())
             .description(createJobDTO.getDescription())

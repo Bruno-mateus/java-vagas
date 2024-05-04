@@ -6,7 +6,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.util.Assert;
 
 import br.com.brunomateus.gestao_vagas.exceptions.JobNotFoundExeception;
 import br.com.brunomateus.gestao_vagas.exceptions.UserNotFoundExeception;
